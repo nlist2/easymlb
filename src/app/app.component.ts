@@ -60,6 +60,7 @@ export class AppComponent {
     this.subscription = this.dbService.loadYears().subscribe({
       next: (years) => {
         this.userCards = years; // Update userCards when data is loaded
+        this.userCards.reverse();
       },
       error: (err) => {
         console.error("Failed to load years:", err);

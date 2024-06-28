@@ -71,7 +71,7 @@
   margin: 20px;
   border-radius: 15px;
   border: 1px solid darkgrey;
-  background-color: lightgray;
+  background-color: rgba(211, 211, 211, 0.5);
 }
 
 .year-link {
