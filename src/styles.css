@@ -1,0 +1,18 @@
+@import "@angular/material/prebuilt-themes/deeppurple-amber.css";
+@import "https://fonts.googleapis.com/icon?family=Material+Icons";
+
+html .mat-mdc-slider .mdc-slider__track--inactive {
+  background-color: gray;
+}
+
+html .mat-mdc-slider .mdc-slider__track--active_fill {
+  border-color: black;
+}
+
+html .mat-mdc-slider .mdc-slider__thumb-knob {
+  border-color: black;
+}
+
+html .mat-mdc-slider .mdc-slider__thumb-knob {
+  border-color: black;
+}
