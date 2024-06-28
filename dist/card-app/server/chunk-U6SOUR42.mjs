@@ -51703,13 +51703,11 @@ function YU(t, e) {
               l.push(d.batchId);
               for (let u of d.mutations) c = c.add(u.key);
             }
-            return i.localDocuments
-              .getDocuments(r, c)
-              .next((d) => ({
-                affectedDocuments: d,
-                removedBatchIds: a,
-                addedBatchIds: l,
-              }));
+            return i.localDocuments.getDocuments(r, c).next((d) => ({
+              affectedDocuments: d,
+              removedBatchIds: a,
+              addedBatchIds: l,
+            }));
           });
       },
     );

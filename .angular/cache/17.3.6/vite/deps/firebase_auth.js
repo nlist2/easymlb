@@ -9220,7 +9220,7 @@ var mintCookieFactory = (url) => (user) =>
     const idTokenResult = user && (yield user.getIdTokenResult());
     const idTokenAge =
       idTokenResult &&
-      (/* @__PURE__ */ new Date().getTime() -
+      /* @__PURE__ */ (new Date().getTime() -
         Date.parse(idTokenResult.issuedAtTime)) /
         1e3;
     if (idTokenAge && idTokenAge > authIdTokenMaxAge) {

@@ -13,12 +13,6 @@ function _isNumberValue(value) {
 function coerceArray(value) {
   return Array.isArray(value) ? value : [value];
 }
-function coerceCssPixelValue(value) {
-  if (value == null) {
-    return "";
-  }
-  return typeof value === "string" ? value : `${value}px`;
-}
 function coerceElement(elementOrRef) {
   return elementOrRef instanceof ElementRef
     ? elementOrRef.nativeElement
@@ -29,7 +23,6 @@ export {
   coerceBooleanProperty,
   coerceNumberProperty,
   coerceArray,
-  coerceCssPixelValue,
   coerceElement,
 };
-//# sourceMappingURL=chunk-63HXPDY5.js.map
+//# sourceMappingURL=chunk-OLZFSAKY.js.map

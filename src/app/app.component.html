@@ -14,23 +14,19 @@
     </div>
 
     <!-- Year View -->
-    <div class="card-years">
+    <div class="card-years" *ngIf="!isYearComponentRoute()">
       <div class="md-padding row-wrap row-gap-center-start">
-        <div
-          class="card-row"
-          *ngFor="let year of userCards"
-        >
-        <a [routerLink]="['/', year]" class="year-link">
-          <div class="year-number">
-            <h1>
-              {{ year }}
-            </h1>
-          </div>
-        </a>
+        <div class="card-row" *ngFor="let year of userCards">
+          <a [routerLink]="['/', year]" class="year-link">
+            <div class="year-number">
+              <h1>
+                {{ year }}
+              </h1>
+            </div>
+          </a>
         </div>
       </div>
     </div>
   </div>
-
-  <router-outlet />
 </main>
+<router-outlet />
