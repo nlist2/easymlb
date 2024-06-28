@@ -1,6 +1,20 @@
 <div layout="row" class="year-content">
   <button mat-button (click)="backToMain()">
-    <mat-icon> keyboard_arrow_left </mat-icon>
+    <mat-icon> arrow_back </mat-icon>
     <h1>{{ year }}</h1>
   </button>
+
+  <div class="md-padding row-wrap row-gap-center-start">
+    <div class="card-row" *ngFor="let team of userTeams">
+      <a class="year-link">
+        <a [routerLink]="['/' + year, team]" class="year-link">
+            <div class="year-number">
+              <h1>
+                {{ team }}
+              </h1>
+            </div>
+          </a>
+      </a>
+    </div>
+  </div>
 </div>

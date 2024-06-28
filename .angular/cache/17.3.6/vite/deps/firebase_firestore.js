@@ -16,7 +16,7 @@ import {
   isIndexedDBAvailable,
   isSafari,
   registerVersion,
-} from "./chunk-R5SOW6U4.js";
+} from "./chunk-QSCSUJNU.js";
 import { __async, __superGet } from "./chunk-LJ4VCL4A.js";
 
 // node_modules/@firebase/webchannel-wrapper/dist/esm/index.esm2017.js

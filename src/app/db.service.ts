@@ -1,104 +1,66 @@
 import { Injectable } from "@angular/core";
-import { FirebaseApp, initializeApp } from "firebase/app";
+import { FirebaseApp, FirebaseError, initializeApp } from "firebase/app";
 import {
-  CollectionReference,
-  DocumentData,
   collection,
-  doc,
   getDocs,
-  deleteDoc,
-  getFirestore,
-  setDoc,
   Firestore,
+  DocumentData,
+  QueryDocumentSnapshot,
+  getFirestore,
+  collectionGroup,
+  query,
+  where,
 } from "firebase/firestore";
-import { Subject } from "rxjs";
+import { Observable, Observer } from "rxjs";
 import { firebaseConfig } from "../environment";
-import { Auth, getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 @Injectable({
   providedIn: "root",
 })
 export class DbService {
-  cardData: CollectionReference<DocumentData>;
-  userCards: DocumentData[] = [];
-  private cardDataSubject = new Subject<DocumentData[]>();
-  cardData$ = this.cardDataSubject.asObservable();
-  response: any;
-  private auth: Auth;
-  loggedIn: boolean = false;
-  private username: string = "";
   private db: Firestore;
   private app: FirebaseApp;
 
   constructor() {
     this.app = initializeApp(firebaseConfig);
     this.db = getFirestore(this.app);
-    this.auth = getAuth(this.app);
   }
 
-  public async onFormSubmit(
-    playerName: string,
-    cardNumber: string,
-    cardCompany: string,
-    psaCert: any,
-    imageURL?: string,
-  ): Promise<void> {
-    if (!this.cardData) {
-      console.error("Card data collection is not initialized.");
-      return;
-    }
+  public loadYears(): Observable<string[]> {
+    return new Observable<string[]>((observer: Observer<string[]>) => {
+      const cardData = collection(this.db, "years");
 
-    await setDoc(doc(this.cardData, playerName), {
-      playerName: playerName,
-      cardNumber: cardNumber,
-      cardCompany: cardCompany,
-      psaCert: psaCert,
-      imageURL: imageURL ?? "",
+      getDocs(cardData)
+        .then((querySnapshot) => {
+          const userYears: string[] = [];
+          querySnapshot.forEach((doc: QueryDocumentSnapshot<DocumentData>) => {
+            userYears.push(doc.id);
+          });
+          observer.next(userYears);
+          observer.complete();
+        })
+        .catch((error) => {
+          observer.error(error);
+        });
     });
-
-    await this.loadCardData(); // Reload data after submitting
   }
 
-  public async loadCardData(): Promise<void> {
-    this.cardData = collection(this.db, this.username);
-    if (!this.cardData) {
-      console.error("Card data collection is not initialized.");
-      return;
-    }
+  public loadTeams(year: string): Observable<string[]> {
+    return new Observable<string[]>((observer: Observer<string[]>) => {
+      const teamsRef = collection(this.db, `years/${year}/teams`);
 
-    const querySnapshot = await getDocs(this.cardData);
-    this.userCards = [];
-    querySnapshot.forEach((doc) => {
-      if (this.userCards.indexOf(doc.data()) === -1) {
-        this.userCards.push(doc.data());
-      } else {
-        console.log("This item already exists");
-      }
+      getDocs(teamsRef)
+        .then((querySnapshot) => {
+          const userTeams: string[] = [];
+          querySnapshot.forEach((doc: QueryDocumentSnapshot<DocumentData>) => {
+            userTeams.push(doc.id);
+          });
+          observer.next(userTeams);
+          observer.complete();
+        })
+        .catch((error: FirebaseError) => {
+          observer.error(error); // Handle error
+        });
     });
-
-    this.cardDataSubject.next(this.userCards); // Notify subscribers
-  }
-
-  public async deleteCard(playerName: string): Promise<void> {
-    if (!this.cardData) {
-      console.error("Card data collection is not initialized.");
-      return;
-    }
-
-    await deleteDoc(doc(this.cardData, playerName));
-    await this.loadCardData(); // Reload data after deletion
-  }
-
-  public async signIn(username: string, password: string): Promise<boolean> {
-    return signInWithEmailAndPassword(this.auth, username, password)
-      .then((userCredential) => {
-        // Successful sign-in
-        return true;
-      })
-      .catch((error) => {
-        // Failed sign-in
-        console.error(error);
-        return false;
-      });
   }
 }
