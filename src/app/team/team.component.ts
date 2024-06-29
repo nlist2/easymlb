@@ -19,7 +19,7 @@ import { RouterModule } from "@angular/router";
 export class TeamComponent implements OnInit {
   public team: string;
   public year: string;
-  public userGames: string[] = []; // Initialize as an empty array
+  public userGames: any[] = []; // Initialize as an empty array
   private subscription: Subscription | undefined;
 
   constructor(
@@ -34,7 +34,7 @@ export class TeamComponent implements OnInit {
       this.year = params.get("year") || "";
     });
 
-    //this.loadUserGames(this.year, this.team);
+    this.loadUserGames(this.year, this.team);
   }
 
   ngOnDestroy(): void {
@@ -42,6 +42,23 @@ export class TeamComponent implements OnInit {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+  }
+
+  public titleCase(str: string): string {
+    return str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
+  }
+
+  private loadUserGames(year: string, team: string): void {
+    const teamTitle = this.titleCase(team);
+    this.subscription = this.dbService.loadGames(year, teamTitle).subscribe({
+      next: (years) => {
+        this.userGames = years; // Update userCards when data is loaded
+      },
+      error: (err) => {
+        console.error("Failed to load years:", err);
+        // Handle error loading years if needed
+      },
+    });
   }
 
   backToYear(): void {

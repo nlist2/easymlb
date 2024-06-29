@@ -63,4 +63,24 @@ export class DbService {
         });
     });
   }
+
+  public loadGames(year: string, team: string): Observable<any[]> {
+    return new Observable<any[]>((observer: Observer<any[]>) => {
+      const gamesRef = collection(this.db, `years/${year}/teams/${team}/games`);
+
+      getDocs(gamesRef)
+        .then((querySnapshot) => {
+          const games: any[] = [];
+          querySnapshot.forEach((doc: QueryDocumentSnapshot<DocumentData>) => {
+            games.push(doc.data());
+            console.log(doc.data())
+          });
+          observer.next(games);
+          observer.complete();
+        })
+        .catch((error: FirebaseError) => {
+          observer.error(error); // Handle error
+        });
+    });
+  }
 }

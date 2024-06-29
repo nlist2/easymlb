@@ -1,23 +1,62 @@
+.md-padding {
+  padding: 20px;
+}
+
+.row-wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.row-gap-center-start {
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.card-row {
+  align-items: center;
+  width: 200px;
+  height: 150px;
+  margin: 20px;
+  border-radius: 15px;
+  border: 1px solid darkgrey;
+  background-color: rgba(211, 211, 211, 0.5);
+}
+
+.year-number {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.year-link {
+  display: block;
+  text-decoration: none;
+  justify-content: center;
+  color: inherit;
+  width: 100%;
+  height: 100%;
+}
 
 h1 {
-    color: var(--gray-900);
-    font-weight: 400;
-    font-size: xx-large;
-    line-height: 100%;
-    letter-spacing: -0.1rem;
-    margin: 0;
-    font-family:
-      "Inter Tight",
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      Roboto,
-      Helvetica,
-      Arial,
-      sans-serif,
-      "Apple Color Emoji",
-      "Segoe UI Emoji",
-      "Segoe UI Symbol";
-    text-align: center;
-  }
-  
+  color: var(--gray-900);
+  font-weight: 400;
+  font-size: xx-large;
+  line-height: 100%;
+  letter-spacing: -0.1rem;
+  margin: 0;
+  font-family:
+    "Inter Tight",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  text-align: center;
+}

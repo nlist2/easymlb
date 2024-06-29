@@ -5,6 +5,24 @@
     </button>
   
     <div class="md-padding row-wrap row-gap-center-start">
-        
+      <div class="card-row" *ngFor="let team of userGames">
+        <a class="year-link">
+          <a
+            class="year-link"
+          >
+            <div class="year-number">
+              <p>
+                {{ team['away_team'] }}
+                {{ team['away_score'] }}
+              </p>
+
+              <p>
+                {{ team['home_team'] }}
+                {{ team['home_score'] }}
+              </p>
+            </div>
+          </a>
+        </a>
+      </div>
     </div>
     </div>
