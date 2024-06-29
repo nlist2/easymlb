@@ -5,21 +5,37 @@
     </button>
   
     <div class="md-padding row-wrap row-gap-center-start">
-      <div class="card-row" *ngFor="let team of userGames">
+      <div class="card-row" *ngFor="let game of userGames">
         <a class="year-link">
           <a
+          [routerLink]="['/', year, team_link, game['game_id']]"
             class="year-link"
           >
-            <div class="year-number">
-              <p>
-                {{ team['away_team'] }}
-                {{ team['away_score'] }}
-              </p>
-
-              <p>
-                {{ team['home_team'] }}
-                {{ team['home_score'] }}
-              </p>
+          <div>
+            {{ game['game_date'].split("T")[0] }}
+          </div>
+            <div layout="row" class="year-number">
+              <div layout="column">
+                <div>
+                  {{ game['away_team'] }}
+                </div>
+                <div>
+                  <h1>
+                    {{ game['away_score'] }}
+                  </h1>
+                </div>
+              </div>
+              
+              <div layout="column">
+                <div>
+                  {{ game['home_team'] }}
+                </div>
+                <div>
+                  <h1>
+                    {{ game['home_score'] }}
+                  </h1>
+                </div>
+              </div>
             </div>
           </a>
         </a>

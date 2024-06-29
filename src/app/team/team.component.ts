@@ -19,6 +19,7 @@ import { RouterModule } from "@angular/router";
 export class TeamComponent implements OnInit {
   public team: string;
   public year: string;
+  public team_link: string;
   public userGames: any[] = []; // Initialize as an empty array
   private subscription: Subscription | undefined;
 
@@ -30,6 +31,7 @@ export class TeamComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
+      this.team_link = params.get("team") || "";
       this.team = params.get("team")?.replaceAll("_", " ") || "";
       this.year = params.get("year") || "";
     });
