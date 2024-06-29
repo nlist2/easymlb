@@ -61,6 +61,7 @@ export class AppComponent {
       next: (years) => {
         this.userCards = years; // Update userCards when data is loaded
         this.userCards.reverse();
+        console.log(this.userCards)
       },
       error: (err) => {
         console.error("Failed to load years:", err);
