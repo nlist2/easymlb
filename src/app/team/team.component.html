@@ -11,29 +11,29 @@
           [routerLink]="['/', year, team_link, game['game_id']]"
             class="year-link"
           >
-          <div>
+          <div class="game-date">
             {{ game['game_date'].split("T")[0] }}
           </div>
             <div layout="row" class="year-number">
-              <div layout="column">
+              <div fxFlex="50%" style="padding:5px; align-content: center;" layout="column">
                 <div>
                   {{ game['away_team'] }}
                 </div>
                 <div>
-                  <h1>
+                  <b>
                     {{ game['away_score'] }}
-                  </h1>
+                  </b>
                 </div>
               </div>
               
-              <div layout="column">
+              <div fxFlex="50%" style="padding:5px" layout="column">
                 <div>
                   {{ game['home_team'] }}
                 </div>
                 <div>
-                  <h1>
+                  <b>
                     {{ game['home_score'] }}
-                  </h1>
+                  </b>
                 </div>
               </div>
             </div>

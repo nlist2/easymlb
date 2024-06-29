@@ -14,8 +14,8 @@
 
 .card-row {
   align-items: center;
-  width: 200px;
-  height: 150px;
+  width: 275px;
+  height: 200px;
   margin: 20px;
   border-radius: 15px;
   border: 1px solid darkgrey;
@@ -23,6 +23,7 @@
 }
 
 .year-number {
+  margin-top: -10px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -59,4 +60,10 @@ h1 {
     "Segoe UI Emoji",
     "Segoe UI Symbol";
   text-align: center;
+}
+
+.game-date{
+  text-align: center;
+  font-weight: 500;
+  color: darkgrey
 }
