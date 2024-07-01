@@ -54,7 +54,13 @@ export class TeamComponent implements OnInit {
     const teamTitle = this.titleCase(team);
     this.subscription = this.dbService.loadGames(year, teamTitle).subscribe({
       next: (years) => {
-        this.userGames = years; // Update userCards when data is loaded
+              // Assuming years is an array of objects and each object has a property 'game_date'
+      this.userGames = years.sort((a, b) => {
+        const dateA = new Date(a.game_date);
+        const dateB = new Date(b.game_date);
+        return dateB.getTime() - dateA.getTime();
+      });
+
       },
       error: (err) => {
         console.error("Failed to load years:", err);

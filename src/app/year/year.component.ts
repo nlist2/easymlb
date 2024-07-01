@@ -20,6 +20,7 @@ export class YearComponent implements OnInit {
   public year: string;
   public userTeams: string[] = []; // Initialize as an empty array
   private subscription: Subscription | undefined;
+  public teamDesigns: any[];
 
   constructor(
     private router: Router,
@@ -33,6 +34,7 @@ export class YearComponent implements OnInit {
     });
 
     this.loadUserTeams(this.year);
+    this.loadTeamDesigns();
   }
 
   ngOnDestroy(): void {
@@ -53,6 +55,23 @@ export class YearComponent implements OnInit {
       },
     });
   }
+
+  private loadTeamDesigns(): void {
+    this.subscription = this.dbService.loadTeamsDesigns().subscribe({
+      next: (years) => {
+        this.teamDesigns = years;
+      },
+      error: (err) => {
+        console.error("Failed to load years:", err);
+      },
+    });
+  }
+
+  public getTeamDesign(teamId: string): any | undefined {
+    const team = this.teamDesigns?.find(team => team.id === teamId);
+    return team ? team.data : undefined;
+  }
+  
 
   backToMain(): void {
     this.router.navigate(["/"]);

@@ -45,6 +45,26 @@ export class DbService {
     });
   }
 
+  public loadTeamsDesigns(): Observable<any[]> {
+    return new Observable<any[]>((observer: Observer<any[]>) => {
+      const teamsRef = collection(this.db, `teams`);
+  
+      getDocs(teamsRef)
+        .then((querySnapshot) => {
+          const userTeams: any[] = [];
+          querySnapshot.forEach((doc: QueryDocumentSnapshot<DocumentData>) => {
+            const teamData = doc.data();
+            userTeams.push({ id: doc.id, data: teamData });
+          });
+          observer.next(userTeams);
+          observer.complete();
+        })
+        .catch((error: FirebaseError) => {
+          observer.error(error); // Handle error
+        });
+    });
+  }
+
   public loadTeams(year: string): Observable<string[]> {
     return new Observable<string[]>((observer: Observer<string[]>) => {
       const teamsRef = collection(this.db, `years/${year}/teams`);
@@ -73,7 +93,6 @@ export class DbService {
           const games: any[] = [];
           querySnapshot.forEach((doc: QueryDocumentSnapshot<DocumentData>) => {
             games.push(doc.data());
-            console.log(doc.data())
           });
           observer.next(games);
           observer.complete();
