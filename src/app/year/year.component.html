@@ -8,10 +8,10 @@
     <div
       class="card-row"
       *ngFor="let team of userTeams"
-      [ngStyle]="{'background-color': getTeamDesign(team).colors[0]}"
+      [ngStyle]="{'background-color': getTeamDesign(team)?.colors[0]}"
     >
       <img 
-        [src]="getTeamDesign(team).imgURL" 
+        [src]="getTeamDesign(team)?.imgURL" 
         alt="{{ team }} logo" 
         class="team-logo"
       >

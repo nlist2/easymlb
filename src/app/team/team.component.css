@@ -67,3 +67,27 @@ h1 {
   font-weight: 500;
   color: darkgrey
 }
+
+.card-row {
+  position: relative;
+  text-align: center;
+  padding: 20px;
+  overflow: hidden;
+}
+
+.team-logo {
+  max-width: 70px; /* Adjusted max-width to make the image smaller */
+  height: 70px; /* Adjusted max-height to make the image smaller */
+  z-index: 1;
+  border-radius: 10px; /* Optional: Adds a slight border radius for style */
+}
+
+.at-col {
+  margin: 20px;
+}
+
+.score {
+  font-size: 50px;
+  font-weight: 800;
+  margin-top: 20px;
+}

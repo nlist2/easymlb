@@ -47,7 +47,7 @@ export class YearComponent implements OnInit {
   private loadUserTeams(year: string): void {
     this.subscription = this.dbService.loadTeams(year).subscribe({
       next: (years) => {
-        this.userTeams = years; // Update userCards when data is loaded
+        this.userTeams = years;
       },
       error: (err) => {
         console.error("Failed to load years:", err);

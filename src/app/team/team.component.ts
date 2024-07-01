@@ -22,6 +22,7 @@ export class TeamComponent implements OnInit {
   public team_link: string;
   public userGames: any[] = []; // Initialize as an empty array
   private subscription: Subscription | undefined;
+  public teamDesigns: any[];
 
   constructor(
     private router: Router,
@@ -37,6 +38,7 @@ export class TeamComponent implements OnInit {
     });
 
     this.loadUserGames(this.year, this.team);
+    this.loadTeamDesigns();
   }
 
   ngOnDestroy(): void {
@@ -68,6 +70,23 @@ export class TeamComponent implements OnInit {
       },
     });
   }
+
+  private loadTeamDesigns(): void {
+    this.subscription = this.dbService.loadTeamsDesigns().subscribe({
+      next: (years) => {
+        this.teamDesigns = years;
+      },
+      error: (err) => {
+        console.error("Failed to load years:", err);
+      },
+    });
+  }
+
+  public getTeamDesign(teamId: string): any | undefined {
+    const team = this.teamDesigns?.find(team => team.id === teamId);
+    return team ? team.data : undefined;
+  }
+  
 
   backToYear(): void {
     this.router.navigate(["/" + this.year]);
