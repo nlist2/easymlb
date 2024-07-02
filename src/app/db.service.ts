@@ -10,6 +10,9 @@ import {
   collectionGroup,
   query,
   where,
+  doc,
+  getDoc,
+  DocumentSnapshot,
 } from "firebase/firestore";
 import { Observable, Observer } from "rxjs";
 import { firebaseConfig } from "../environment";
@@ -24,25 +27,6 @@ export class DbService {
   constructor() {
     this.app = initializeApp(firebaseConfig);
     this.db = getFirestore(this.app);
-  }
-
-  public loadYears(): Observable<string[]> {
-    return new Observable<string[]>((observer: Observer<string[]>) => {
-      const cardData = collection(this.db, "years");
-
-      getDocs(cardData)
-        .then((querySnapshot) => {
-          const userYears: string[] = [];
-          querySnapshot.forEach((doc: QueryDocumentSnapshot<DocumentData>) => {
-            userYears.push(doc.id);
-          });
-          observer.next(userYears);
-          observer.complete();
-        })
-        .catch((error) => {
-          observer.error(error);
-        });
-    });
   }
 
   public loadTeamsDesigns(): Observable<any[]> {
@@ -87,6 +71,45 @@ export class DbService {
   public loadGames(year: string, team: string): Observable<any[]> {
     return new Observable<any[]>((observer: Observer<any[]>) => {
       const gamesRef = collection(this.db, `years/${year}/teams/${team}/games`);
+
+      getDocs(gamesRef)
+        .then((querySnapshot) => {
+          const games: any[] = [];
+          querySnapshot.forEach((doc: QueryDocumentSnapshot<DocumentData>) => {
+            games.push(doc.data());
+          });
+          observer.next(games);
+          observer.complete();
+        })
+        .catch((error: FirebaseError) => {
+          observer.error(error); // Handle error
+        });
+    });
+  }
+
+  public loadGameMeta(game_id: string): Observable<any> {
+    return new Observable<any>((observer: Observer<any>) => {
+      const gameDocRef = doc(this.db, 'games', game_id);
+  
+      getDoc(gameDocRef)
+        .then((docSnapshot: DocumentSnapshot<any>) => {
+          if (docSnapshot.exists()) {
+            const gameData = docSnapshot.data();
+            observer.next(gameData);
+          } else {
+            observer.next(null); // Document does not exist
+          }
+          observer.complete();
+        })
+        .catch((error: FirebaseError) => {
+          observer.error(error); // Handle error
+        });
+    });
+  }
+
+  public loadPlayData(game_id: string): Observable<any[]> {
+    return new Observable<any[]>((observer: Observer<any[]>) => {
+      const gamesRef = collection(this.db, `games/${game_id}/scoring_plays`);
 
       getDocs(gamesRef)
         .then((querySnapshot) => {

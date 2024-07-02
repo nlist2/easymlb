@@ -7,6 +7,9 @@
   <div class="md-padding row-wrap row-gap-center-start">
     <div class="card-row" *ngFor="let game of userGames">
       <a class="year-link" [routerLink]="['/', year, team_link, game['game_id']]">
+        <div class="game-type">
+          {{ getRoundInfo(game['game_type'])?.description }}
+        </div>
         <div class="game-date">
           {{ game['game_date'].split("T")[0] }}
         </div>
@@ -30,3 +33,4 @@
     </div>
   </div>
 </div>
+<router-outlet />

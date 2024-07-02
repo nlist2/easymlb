@@ -1,0 +1,77 @@
+.md-padding {
+    padding: 20px;
+  }
+  
+  .row-wrap {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .row-gap-center-start {
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .year-number {
+    margin-top: -10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+  }
+  
+  .year-link {
+    display: block;
+    text-decoration: none;
+    justify-content: center;
+    color: inherit;
+    width: 100%;
+    height: 100%;
+  }
+  
+  h1 {
+    color: var(--gray-900);
+    font-weight: 400;
+    font-size: xx-large;
+    line-height: 100%;
+    letter-spacing: -0.1rem;
+    margin: 0;
+    font-family:
+      "Inter Tight",
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Helvetica,
+      Arial,
+      sans-serif,
+      "Apple Color Emoji",
+      "Segoe UI Emoji",
+      "Segoe UI Symbol";
+    text-align: center;
+  }
+  
+  .game-date{
+    text-align: center;
+    font-weight: 500;
+    color: darkgrey
+  }
+  
+  
+  .team-logo {
+    max-width: 70px; /* Adjusted max-width to make the image smaller */
+    height: 70px; /* Adjusted max-height to make the image smaller */
+    z-index: 1;
+    border-radius: 10px; /* Optional: Adds a slight border radius for style */
+  }
+  
+  .at-col {
+    margin: 20px;
+  }
+  
+  .score {
+    font-size: 50px;
+    font-weight: 800;
+    margin-top: 20px;
+  }

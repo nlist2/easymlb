@@ -46,27 +46,15 @@ export class AppComponent {
   ) {}
 
   ngOnInit(): void {
-    this.loadUserCards();
-  }
+    const startYear = 2024;
+    const endYear = 1960;
 
-  ngOnDestroy(): void {
-    // Unsubscribe from the observable to prevent memory leaks
-    if (this.subscription) {
-      this.subscription.unsubscribe();
+    for (let year = startYear; year >= endYear; year--) {
+      this.userCards.push(year.toString());
     }
   }
 
-  private loadUserCards(): void {
-    this.subscription = this.dbService.loadYears().subscribe({
-      next: (years) => {
-        this.userCards = years; // Update userCards when data is loaded
-        this.userCards.reverse();
-      },
-      error: (err) => {
-        console.error("Failed to load years:", err);
-        // Handle error loading years if needed
-      },
-    });
+  ngOnDestroy(): void {
   }
 
   public isYearComponentRoute(): boolean {

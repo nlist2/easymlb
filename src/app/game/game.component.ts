@@ -16,19 +16,22 @@ interface RoundInfo {
 
 
 @Component({
-  selector: "app-team",
+  selector: "app-game",
   standalone: true,
-  templateUrl: "team.component.html",
-  styleUrls: ["team.component.css"],
+  templateUrl: "game.component.html",
+  styleUrls: ["game.component.css"],
   imports: [MatButtonModule, MatIconModule, CommonModule, RouterModule],
 })
-export class TeamComponent implements OnInit {
+export class GameComponent implements OnInit {
   public team: string;
   public year: string;
+  public game_id: string;
   public team_link: string;
   public userGames: any[] = []; // Initialize as an empty array
   private subscription: Subscription | undefined;
   public teamDesigns: any[];
+  public gameData:any[];
+  public gameMeta: any;
   
 
   constructor(
@@ -57,9 +60,10 @@ export class TeamComponent implements OnInit {
       this.team_link = params.get("team") || "";
       this.team = params.get("team")?.replaceAll("_", " ") || "";
       this.year = params.get("year") || "";
+      this.game_id = params.get("game") || "";
     });
 
-    this.loadUserGames(this.year, this.team);
+    this.loadGame();
     this.loadTeamDesigns();
   }
 
@@ -70,27 +74,30 @@ export class TeamComponent implements OnInit {
     }
   }
 
-  public titleCase(str: string): string {
-    return str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
-  }
-
-  private loadUserGames(year: string, team: string): void {
-    const teamTitle = this.titleCase(team);
-    this.subscription = this.dbService.loadGames(year, teamTitle).subscribe({
+  private loadGame(): void {
+    this.subscription = this.dbService.loadPlayData(this.game_id).subscribe({
       next: (years) => {
-              // Assuming years is an array of objects and each object has a property 'game_date'
-      this.userGames = years.sort((a, b) => {
-        const dateA = new Date(a.game_date);
-        const dateB = new Date(b.game_date);
-        return dateB.getTime() - dateA.getTime();
-      });
-
+        this.gameData = years;
       },
       error: (err) => {
         console.error("Failed to load years:", err);
-        // Handle error loading years if needed
       },
     });
+
+    this.subscription = this.dbService.loadGameMeta(this.game_id).subscribe({
+        next: (years) => {
+          this.gameMeta = years;
+          console.log(this.gameMeta);
+        },
+        error: (err) => {
+          console.error("Failed to load years:", err);
+        },
+      });
+
+  }
+
+  public titleCase(str: string): string {
+    return str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
   }
 
   private loadTeamDesigns(): void {
@@ -110,7 +117,8 @@ export class TeamComponent implements OnInit {
   }
   
 
-  backToYear(): void {
-    this.router.navigate(["/" + this.year]);
+
+  backToTeam(): void {
+    this.router.navigate(["/" + this.year + "/" + this.team_link]);
   }
 }
