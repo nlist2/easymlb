@@ -1,33 +1,81 @@
 <div layout="row" class="year-content">
-    <button style="margin-left: 20px" mat-button (click)="backToTeam()">
-      <mat-icon>arrow_back</mat-icon>
-      <h1 *ngIf="gameMeta">{{ gameMeta['away_name'].toLowerCase() }} &#64; {{ gameMeta['home_name'].toLowerCase() }}</h1>
-    </button>
-  
-    <div *ngIf="gameMeta" class="md-padding row-wrap row-gap-center-start">
-       <h1>
-        {{ gameMeta['game_date']}}
-       </h1> 
-       <div layout="row" class="year-number">
-        <div fxFlex="30%" style="padding: 5px; align-content: center;" layout="column">
-          <img [src]="getTeamDesign(gameMeta['away_name'])?.imgURL" alt="{{ gameMeta['away_team'] }} logo" class="team-logo">
-            <h1 class="score">{{ gameMeta['away_score'] }}</h1>
-        </div>
+  <button style="margin-left: 20px" mat-button (click)="backToTeam()">
+    <mat-icon>arrow_back</mat-icon>
+    <h1 *ngIf="gameMeta">
+      {{ formatDate(gameMeta['game_date']) }} {{ toAbbrev(gameMeta['away_name']) }} &#64; {{
+      toAbbrev(gameMeta['home_name']) }}
+    </h1>
+  </button>
 
-        <div class="at-col" fxFlex="40%" style="padding: 5px; align-content: center;" layout="column">
-            <h1> &#64; </h1>
-        </div>
+  <div *ngIf="gameMeta" class="md-padding row-wrap row-gap-center-start">
+    <!-- Box Score div -->
+    <div layout="column" class="score-details" fxFlex="20%">
+      {{ getRoundInfo(gameMeta['game_type'])?.description }}
+    </div>
 
-
-        <div fxFlex="30%" style="padding: 5px" layout="column">
-          <img [src]="getTeamDesign(gameMeta['home_name'])?.imgURL" alt="{{ gameMeta['home_name'] }} logo" class="team-logo">
-            <h1 class="score">{{ gameMeta['home_score'] }}</h1>
-        </div>
+    <!-- Score title div -->
+    <div layout="row" class="year-number" fxFlex="60%" style="justify-content: center;">
+      <div fxFlex="30%" style="padding: 5px; align-content: center;" layout="column">
+        <img [src]="getTeamDesign(gameMeta['away_name'])?.imgURL" alt="{{ gameMeta['away_team'] }} logo"
+          class="team-logo">
+        <h1 class="score">{{ gameMeta['away_score'] }}</h1>
       </div>
-      <h1> Scoring Plays </h1>
-      <div class="card-row" *ngFor="let score of gameData">
-        {{ score.desc }}
+
+      <div class="at-col" fxFlex="10%" style="padding: 5px; align-content: center;" layout="column">
+        <h1> &#64; </h1>
+      </div>
+
+      <div fxFlex="30%" style="padding: 5px" layout="column">
+        <img [src]="getTeamDesign(gameMeta['home_name'])?.imgURL" alt="{{ gameMeta['home_name'] }} logo"
+          class="team-logo">
+        <h1 class="score">{{ gameMeta['home_score'] }}</h1>
       </div>
     </div>
+
+    <div layout="row" class="year-content">
+      <h1 style="margin-bottom: 10px;"> Scoring Plays </h1>
+      <div *ngIf="gameData" class="md-padding row-wrap row-gap-center-start">
+        <!-- Scoring Plays Table -->
+        <table mat-table [dataSource]="gameData" class="game-table mat-elevation-z8">
+          <!-- Inning and Scores Column -->
+          <ng-container matColumnDef="inningScores">
+            <th mat-header-cell *matHeaderCellDef>Inning</th>
+            <td mat-cell *matCellDef="let score">{{ score.halfInn }} {{ score.inning }}</td>
+          </ng-container>
+
+          <!-- Away Team Score Column -->
+          <ng-container matColumnDef="awayScore">
+            <th mat-header-cell *matHeaderCellDef> <img [src]="getTeamDesign(gameMeta['away_name'])?.imgURL"
+                alt="{{ gameMeta['away_name'] }} logo" class="team-table-logo"></th>
+            <td mat-cell *matCellDef="let score">{{ score.away_score }}</td>
+          </ng-container>
+
+          <!-- Home Team Score Column -->
+          <ng-container matColumnDef="homeScore">
+            <th mat-header-cell *matHeaderCellDef> <img [src]="getTeamDesign(gameMeta['home_name'])?.imgURL"
+                alt="{{ gameMeta['home_name'] }} logo" class="team-table-logo"></th>
+            <td mat-cell *matCellDef="let score">{{ score.home_score }}</td>
+          </ng-container>
+
+          <!-- Description Column -->
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef>Description</th>
+            <td mat-cell *matCellDef="let score">{{ score.desc }}</td>
+          </ng-container>
+
+          <!-- Table Rows -->
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+    </div>
+    <router-outlet />
+
   </div>
-  <router-outlet />
+</div>
+
+<!-- Game details div -->
+<div *ngIf="gameMeta" layout="column" class="game-details">
+
+</div>
+<router-outlet></router-outlet>

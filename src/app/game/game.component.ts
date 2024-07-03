@@ -8,11 +8,9 @@ import { CommonModule } from "@angular/common";
 import { Subscription } from "rxjs";
 import { DbService } from "../db.service";
 import { RouterModule } from "@angular/router";
+import { mlbTeamAbbr, roundMapping, RoundInfo } from "../../environment";
+import { MatTableDataSource, MatTableModule } from "@angular/material/table";
 
-interface RoundInfo {
-  description: string;
-  color: string;
-}
 
 
 @Component({
@@ -20,7 +18,7 @@ interface RoundInfo {
   standalone: true,
   templateUrl: "game.component.html",
   styleUrls: ["game.component.css"],
-  imports: [MatButtonModule, MatIconModule, CommonModule, RouterModule],
+  imports: [MatButtonModule, MatIconModule, CommonModule, RouterModule, MatTableModule],
 })
 export class GameComponent implements OnInit {
   public team: string;
@@ -30,30 +28,19 @@ export class GameComponent implements OnInit {
   public userGames: any[] = []; // Initialize as an empty array
   private subscription: Subscription | undefined;
   public teamDesigns: any[];
-  public gameData:any[];
+  public gameData: any[];
   public gameMeta: any;
-  
+  public mlbAbbr = mlbTeamAbbr;
+  displayedColumns: string[] = ['inningScores', 'awayScore', 'homeScore', 'description'];
+
+  public dataSource: any;
+
 
   constructor(
     private router: Router,
     private dbService: DbService,
     private route: ActivatedRoute,
-  ) {}
-
-  
-  roundMapping: { [key: string]: RoundInfo } = {
-    "F": { description: "Wild Card", color: "#FF0000" },  // Red
-    "D": { description: "Divisional Series", color: "#CD7F32" },  // Bronze
-    "L": { description: "League Championship", color: "#C0C0C0" },  // Silver
-    "W": { description: "World Series", color: "#FFD700" },  // Gold
-    "R": { description: "Regular Season", color: "#FFFFFF" },  // None (White for no specific color)
-    "S": { description: "Spring Training", color: "#808080" }  // Gray
-  };
-  
-  // Example usage:
-  getRoundInfo = (code: string): RoundInfo | undefined => {
-    return this.roundMapping[code];
-  }
+  ) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
@@ -68,16 +55,46 @@ export class GameComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    // Unsubscribe from the observable to prevent memory leaks
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+  }
+
+
+  getRoundInfo = (code: string): RoundInfo | undefined => {
+    return roundMapping[code];
+  }
+
+  public toAbbrev(team: string): any {
+    return this.mlbAbbr[team].toLowerCase();
+  }
+
+  public formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    const formattedDate = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    const dateParts = formattedDate.split(' ');
+    const day = parseInt(dateParts[1], 10);
+
+    let dayWithSuffix;
+    if (day % 10 === 1 && day !== 11) {
+      dayWithSuffix = day + 'st';
+    } else if (day % 10 === 2 && day !== 12) {
+      dayWithSuffix = day + 'nd';
+    } else if (day % 10 === 3 && day !== 13) {
+      dayWithSuffix = day + 'rd';
+    } else {
+      dayWithSuffix = day + 'th';
+    }
+
+    return `${dateParts[0]} ${dayWithSuffix}, ${dateParts[2]}`.toLowerCase();
   }
 
   private loadGame(): void {
     this.subscription = this.dbService.loadPlayData(this.game_id).subscribe({
       next: (years) => {
         this.gameData = years;
+        console.log(this.gameData)
       },
       error: (err) => {
         console.error("Failed to load years:", err);
@@ -85,15 +102,15 @@ export class GameComponent implements OnInit {
     });
 
     this.subscription = this.dbService.loadGameMeta(this.game_id).subscribe({
-        next: (years) => {
-          this.gameMeta = years;
-          console.log(this.gameMeta);
-        },
-        error: (err) => {
-          console.error("Failed to load years:", err);
-        },
-      });
-
+      next: (years) => {
+        this.gameMeta = years;
+        console.log(this.gameMeta);
+      },
+      error: (err) => {
+        console.error("Failed to load years:", err);
+      },
+    });
+    this.dataSource = new MatTableDataSource<any>(this.gameData);
   }
 
   public titleCase(str: string): string {
@@ -115,7 +132,7 @@ export class GameComponent implements OnInit {
     const team = this.teamDesigns?.find(team => team.id === teamId);
     return team ? team.data : undefined;
   }
-  
+
 
 
   backToTeam(): void {

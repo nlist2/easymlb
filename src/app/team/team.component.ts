@@ -8,12 +8,7 @@ import { CommonModule } from "@angular/common";
 import { Subscription } from "rxjs";
 import { DbService } from "../db.service";
 import { RouterModule } from "@angular/router";
-
-interface RoundInfo {
-  description: string;
-  color: string;
-}
-
+import { roundMapping, RoundInfo } from "../../environment";
 
 @Component({
   selector: "app-team",
@@ -29,27 +24,16 @@ export class TeamComponent implements OnInit {
   public userGames: any[] = []; // Initialize as an empty array
   private subscription: Subscription | undefined;
   public teamDesigns: any[];
-  
+
 
   constructor(
     private router: Router,
     private dbService: DbService,
     private route: ActivatedRoute,
-  ) {}
+  ) { }
 
-  
-  roundMapping: { [key: string]: RoundInfo } = {
-    "F": { description: "Wild Card", color: "#FF0000" },  // Red
-    "D": { description: "Divisional Series", color: "#CD7F32" },  // Bronze
-    "L": { description: "League Championship", color: "#C0C0C0" },  // Silver
-    "W": { description: "World Series", color: "#FFD700" },  // Gold
-    "R": { description: "Regular Season", color: "#FFFFFF" },  // None (White for no specific color)
-    "S": { description: "Spring Training", color: "#808080" }  // Gray
-  };
-  
-  // Example usage:
   getRoundInfo = (code: string): RoundInfo | undefined => {
-    return this.roundMapping[code];
+    return roundMapping[code];
   }
 
   ngOnInit(): void {
@@ -64,7 +48,6 @@ export class TeamComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    // Unsubscribe from the observable to prevent memory leaks
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
@@ -78,17 +61,16 @@ export class TeamComponent implements OnInit {
     const teamTitle = this.titleCase(team);
     this.subscription = this.dbService.loadGames(year, teamTitle).subscribe({
       next: (years) => {
-              // Assuming years is an array of objects and each object has a property 'game_date'
-      this.userGames = years.sort((a, b) => {
-        const dateA = new Date(a.game_date);
-        const dateB = new Date(b.game_date);
-        return dateB.getTime() - dateA.getTime();
-      });
+        // Assuming years is an array of objects and each object has a property 'game_date'
+        this.userGames = years.sort((a, b) => {
+          const dateA = new Date(a.game_date);
+          const dateB = new Date(b.game_date);
+          return dateB.getTime() - dateA.getTime();
+        });
 
       },
       error: (err) => {
         console.error("Failed to load years:", err);
-        // Handle error loading years if needed
       },
     });
   }
@@ -108,7 +90,7 @@ export class TeamComponent implements OnInit {
     const team = this.teamDesigns?.find(team => team.id === teamId);
     return team ? team.data : undefined;
   }
-  
+
 
   backToYear(): void {
     this.router.navigate(["/" + this.year]);
