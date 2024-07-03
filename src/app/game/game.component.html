@@ -80,6 +80,7 @@
         <br>
         LP: {{ gameMeta['losing_pitcher'] }}
       </i>
+      {{ gameMeta['saving_pitcher'] ? "SP: " + gameMeta['saving_pitcher'] : ""}}
     </div>
 
 
@@ -96,6 +97,22 @@
                 'arrow_drop_up' : 'arrow_drop_down' }}</mat-icon>{{ score.inning }}</td>
           </ng-container>
 
+          <ng-container matColumnDef="team">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let score">
+              <img *ngIf="score.halfInn === 'top'" [src]="getTeamDesign(gameMeta['away_name'])?.imgURL"
+                alt="{{ gameMeta['away_name'] }} logo" class="table-logo">
+              <img *ngIf="score.halfInn === 'bottom'" [src]="getTeamDesign(gameMeta['home_name'])?.imgURL"
+                alt="{{ gameMeta['home_name'] }} logo" class="table-logo">
+            </td>
+          </ng-container>
+
+          <!-- Description Column -->
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef>Description</th>
+            <td mat-cell *matCellDef="let score">{{ score.desc }}</td>
+          </ng-container>
+
           <!-- Away Team Score Column -->
           <ng-container matColumnDef="awayScore">
             <th mat-header-cell *matHeaderCellDef> <img [src]="getTeamDesign(gameMeta['away_name'])?.imgURL"
@@ -108,12 +125,6 @@
             <th mat-header-cell *matHeaderCellDef> <img [src]="getTeamDesign(gameMeta['home_name'])?.imgURL"
                 alt="{{ gameMeta['home_name'] }} logo" class="team-table-logo"></th>
             <td mat-cell *matCellDef="let score">{{ score.home_score }}</td>
-          </ng-container>
-
-          <!-- Description Column -->
-          <ng-container matColumnDef="description">
-            <th mat-header-cell *matHeaderCellDef>Description</th>
-            <td mat-cell *matCellDef="let score">{{ score.desc }}</td>
           </ng-container>
 
           <!-- Table Rows -->

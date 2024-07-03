@@ -32,7 +32,7 @@ export class GameComponent implements OnInit {
   public gameData: any[];
   public gameMeta: any;
   public mlbAbbr = mlbTeamAbbr;
-  displayedColumns: string[] = ['inningScores', 'awayScore', 'homeScore', 'description'];
+  displayedColumns: string[] = ['inningScores', 'team', 'description', 'awayScore', 'homeScore'];
   public gameScoreboard: any[];
 
   innings: number[] = [];

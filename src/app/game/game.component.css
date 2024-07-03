@@ -179,3 +179,12 @@ h1 {
     margin-bottom: 10px;
   }
 }
+
+.table-logo {
+  height: 30px;
+}
+
+.mat-icon {
+  width: 20px;
+  height: 17px;
+}
