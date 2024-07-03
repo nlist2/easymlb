@@ -10,6 +10,7 @@ import { DbService } from "../db.service";
 import { RouterModule } from "@angular/router";
 import { mlbTeamAbbr, roundMapping, RoundInfo } from "../../environment";
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
+import { ScoringData } from "../../environment";
 
 
 
@@ -32,8 +33,11 @@ export class GameComponent implements OnInit {
   public gameMeta: any;
   public mlbAbbr = mlbTeamAbbr;
   displayedColumns: string[] = ['inningScores', 'awayScore', 'homeScore', 'description'];
+  public gameScoreboard: any[];
 
-  public dataSource: any;
+  innings: number[] = [];
+  awayScores: number[] = [];
+  homeScores: number[] = [];
 
 
   constructor(
@@ -59,7 +63,6 @@ export class GameComponent implements OnInit {
       this.subscription.unsubscribe();
     }
   }
-
 
   getRoundInfo = (code: string): RoundInfo | undefined => {
     return roundMapping[code];
@@ -93,8 +96,11 @@ export class GameComponent implements OnInit {
   private loadGame(): void {
     this.subscription = this.dbService.loadPlayData(this.game_id).subscribe({
       next: (years) => {
-        this.gameData = years;
-        console.log(this.gameData)
+        this.gameData = years.sort((a, b) => (+a.id - +b.id));
+        this.gameScoreboard = this.processGameData(this.gameData);
+        this.innings = this.gameScoreboard.map(data => data.inning);
+        this.awayScores = this.gameScoreboard.map(data => data.away_score);
+        this.homeScores = this.gameScoreboard.map(data => data.home_score);
       },
       error: (err) => {
         console.error("Failed to load years:", err);
@@ -104,13 +110,11 @@ export class GameComponent implements OnInit {
     this.subscription = this.dbService.loadGameMeta(this.game_id).subscribe({
       next: (years) => {
         this.gameMeta = years;
-        console.log(this.gameMeta);
       },
       error: (err) => {
         console.error("Failed to load years:", err);
       },
     });
-    this.dataSource = new MatTableDataSource<any>(this.gameData);
   }
 
   public titleCase(str: string): string {
@@ -137,5 +141,50 @@ export class GameComponent implements OnInit {
 
   backToTeam(): void {
     this.router.navigate(["/" + this.year + "/" + this.team_link]);
+  }
+
+  processGameData(gameData: any[]): ScoringData[] {
+    const processedData: ScoringData[] = [];
+
+    let maxInning = 9;
+    gameData.forEach(score => {
+      if (score.inning > maxInning) {
+        maxInning = score.inning;
+      }
+    });
+
+    // Create innings set from 1 to maxInning
+    const innings = new Set<number>();
+    for (let i = 1; i <= maxInning; i++) {
+      innings.add(i);
+    }
+
+    let last_top_score = 0;
+    let last_bot_score = 0;
+
+    // Iterate through each inning
+    innings.forEach(inning => {
+      // Check if there's a score for Top and Bottom
+      const topScore = gameData.filter(score => score.inning === inning && score.halfInn === 'top');
+      const bottomScore = gameData.filter(score => score.inning === inning && score.halfInn === 'bottom');
+
+      // Create scoring entries for Top and Bottom, defaulting to 0 if no score found
+      const inningEntry: ScoringData = {
+        inning: inning,
+        away_score: topScore.length > 0 ? topScore[topScore.length - 1].away_score - last_top_score : 0,
+        home_score: bottomScore.length > 0 ? bottomScore[bottomScore.length - 1].home_score - last_bot_score : 0,
+      };
+
+      last_bot_score = bottomScore.length > 0 ? bottomScore[bottomScore.length - 1].home_score : last_bot_score;
+      last_top_score = topScore.length > 0 ? topScore[topScore.length - 1].away_score : last_top_score;
+
+      // Push to processedData
+      processedData.push(inningEntry);
+    });
+
+    // Sort processedData by inning
+    processedData.sort((a, b) => a.inning - b.inning);
+
+    return processedData;
   }
 }

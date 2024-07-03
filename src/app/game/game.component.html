@@ -8,39 +8,89 @@
   </button>
 
   <div *ngIf="gameMeta" class="md-padding row-wrap row-gap-center-start">
-    <!-- Box Score div -->
-    <div layout="column" class="score-details" fxFlex="20%">
-      {{ getRoundInfo(gameMeta['game_type'])?.description }}
+    <!-- Container for score-details and year-number divs -->
+    <div class="info-container">
+
+      <!-- Score title div -->
+      <div class="year-number">
+        <div fxFlex="30%" style="padding: 5px; text-align: center;">
+          <img [src]="getTeamDesign(gameMeta['away_name'])?.imgURL" alt="{{ gameMeta['away_team'] }} logo"
+            class="team-logo">
+          <h1 class="score">{{ gameMeta['away_score'] }}</h1>
+        </div>
+
+        <div class="at-col" fxFlex="10%" style="padding: 5px; text-align: center;">
+          <h1> &#64; </h1>
+        </div>
+
+        <div fxFlex="30%" style="padding: 5px; text-align: center;">
+          <img [src]="getTeamDesign(gameMeta['home_name'])?.imgURL" alt="{{ gameMeta['home_name'] }} logo"
+            class="team-logo">
+          <h1 class="score">{{ gameMeta['home_score'] }}</h1>
+        </div>
+      </div>
+      <!-- Box Score div -->
+      <div class="score-details">
+        <div class="detail-item">
+          <i class="game-type">{{ getRoundInfo(gameMeta['game_type'])?.description }}</i>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Stadium:</span> {{ gameMeta['venue_name'] }}
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Series status:</span> {{ gameMeta['series_status'] }}
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Away pitcher:</span> {{ gameMeta['away_probable_pitcher'] }}
+        </div>
+        <div>
+          <span class="detail-label">Home pitcher:</span> {{ gameMeta['home_probable_pitcher'] }}
+        </div>
+      </div>
     </div>
 
-    <!-- Score title div -->
-    <div layout="row" class="year-number" fxFlex="60%" style="justify-content: center;">
-      <div fxFlex="30%" style="padding: 5px; align-content: center;" layout="column">
-        <img [src]="getTeamDesign(gameMeta['away_name'])?.imgURL" alt="{{ gameMeta['away_team'] }} logo"
-          class="team-logo">
-        <h1 class="score">{{ gameMeta['away_score'] }}</h1>
-      </div>
-
-      <div class="at-col" fxFlex="10%" style="padding: 5px; align-content: center;" layout="column">
-        <h1> &#64; </h1>
-      </div>
-
-      <div fxFlex="30%" style="padding: 5px" layout="column">
-        <img [src]="getTeamDesign(gameMeta['home_name'])?.imgURL" alt="{{ gameMeta['home_name'] }} logo"
-          class="team-logo">
-        <h1 class="score">{{ gameMeta['home_score'] }}</h1>
-      </div>
+    <div>
+      <br>
+      <h1>Scorecard</h1>
+      <br>
+      <table class="scoreboard-table">
+        <thead>
+          <tr>
+            <th>Team</th>
+            <th *ngFor="let inning of innings">{{ inning }}</th>
+            <th>Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="team-name"> {{ toAbbrev(gameMeta['away_name']).toUpperCase() }} </td>
+            <td *ngFor="let score of awayScores">{{ score }}</td>
+            <td>{{ gameMeta['away_score'] }}</td>
+          </tr>
+          <tr>
+            <td class="team-name"> {{ toAbbrev(gameMeta['home_name']).toUpperCase() }} </td>
+            <td *ngFor="let score of homeScores">{{ score }}</td>
+            <td>{{ gameMeta['home_score'] }}</td>
+          </tr>
+        </tbody>
+      </table>
+      WP: {{ gameMeta['winning_pitcher'] }}
+      LP: {{ gameMeta['losing_pitcher'] }}
+      {{ gameMeta['saving_pitcher'] ? "SP: " + gameMeta['saving_pitcher'] : ""}}
     </div>
+
 
     <div layout="row" class="year-content">
-      <h1 style="margin-bottom: 10px;"> Scoring Plays </h1>
       <div *ngIf="gameData" class="md-padding row-wrap row-gap-center-start">
         <!-- Scoring Plays Table -->
+        <h1 style="margin-bottom: 10px;"> Scoring Plays </h1>
         <table mat-table [dataSource]="gameData" class="game-table mat-elevation-z8">
           <!-- Inning and Scores Column -->
           <ng-container matColumnDef="inningScores">
             <th mat-header-cell *matHeaderCellDef>Inning</th>
-            <td mat-cell *matCellDef="let score">{{ score.halfInn }} {{ score.inning }}</td>
+            <td mat-cell *matCellDef="let score"> <mat-icon aria-label="Inning"> {{
+                score.halfInn === 'top' ?
+                'arrow_drop_up' : 'arrow_drop_down' }}</mat-icon>{{ score.inning }}</td>
           </ng-container>
 
           <!-- Away Team Score Column -->

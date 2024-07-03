@@ -13,6 +13,12 @@ export interface RoundInfo {
   color: string;
 }
 
+export interface ScoringData {
+  inning: number; // Example: 1, 2, 3, ...
+  home_score: number; // Home team's score in this inning
+  away_score: number; // Away team's score in this inning
+}
+
 export const roundMapping: { [key: string]: RoundInfo } = {
   "F": { description: "Wild Card", color: "#FF0000" },  // Red
   "D": { description: "Divisional Series", color: "#CD7F32" },  // Bronze

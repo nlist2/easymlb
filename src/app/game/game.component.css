@@ -12,13 +12,44 @@
   align-items: flex-start;
 }
 
-.year-number {
-  margin-top: -10px;
+.info-container {
   display: flex;
-  justify-content: flex-start; /* Changed from center to flex-start */
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.year-number {
+  display: flex;
+  justify-content: flex-start;
   align-items: center;
   height: 100%;
-  width: 100%;
+  width: 50%;
+}
+
+.score-details {
+  width: 40%
+}
+
+.detail-item {
+  margin-bottom: 10px;
+}
+
+.game-type {
+  text-align: center;
+}
+
+.detail-label {
+  font-weight: bold;
+  color: #555;
+  display: inline-block;
+  width: 100px;
 }
 
 .year-link {
@@ -90,4 +121,54 @@ h1 {
 .mat-cell, .mat-header-cell {
   padding-top: 10px; /* Adjust as needed */
   padding-bottom: 10px; /* Adjust as needed */
+}
+
+.scoreboard-table {
+  width: 80%;
+  border-collapse: collapse;
+  text-align: center;
+
+  th, td {
+    padding: 10px;
+  }
+
+  tr {
+    border-bottom: 1px solid #ddd;
+  }
+
+  th {
+    background-color: #f4f4f4;
+  }
+  
+  .team-name {
+    text-align: left;
+    padding-left: 10px;
+  }
+}
+
+.year-number {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.at-col h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+/* Media query for responsive design */
+@media (max-width: 768px) {
+  .info-container {
+    flex-direction: column;
+  }
+  
+  .score-details {
+    width: 50%
+  }
+  .year-number {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+  }
 }

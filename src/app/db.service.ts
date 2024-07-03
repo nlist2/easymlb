@@ -32,7 +32,7 @@ export class DbService {
   public loadTeamsDesigns(): Observable<any[]> {
     return new Observable<any[]>((observer: Observer<any[]>) => {
       const teamsRef = collection(this.db, `teams`);
-  
+
       getDocs(teamsRef)
         .then((querySnapshot) => {
           const userTeams: any[] = [];
@@ -90,7 +90,7 @@ export class DbService {
   public loadGameMeta(game_id: string): Observable<any> {
     return new Observable<any>((observer: Observer<any>) => {
       const gameDocRef = doc(this.db, 'games', game_id);
-  
+
       getDoc(gameDocRef)
         .then((docSnapshot: DocumentSnapshot<any>) => {
           if (docSnapshot.exists()) {
@@ -115,7 +115,7 @@ export class DbService {
         .then((querySnapshot) => {
           const games: any[] = [];
           querySnapshot.forEach((doc: QueryDocumentSnapshot<DocumentData>) => {
-            games.push(doc.data());
+            games.push({ id: doc.id, ...doc.data() });
           });
           observer.next(games);
           observer.complete();
