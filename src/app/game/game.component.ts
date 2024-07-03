@@ -74,8 +74,8 @@ export class GameComponent implements OnInit {
 
   public formatDate(dateString: string): string {
     const date = new Date(dateString);
+    date.setHours(date.getHours() + 12)
     const formattedDate = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-
     const dateParts = formattedDate.split(' ');
     const day = parseInt(dateParts[1], 10);
 

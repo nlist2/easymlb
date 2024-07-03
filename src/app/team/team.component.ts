@@ -75,6 +75,13 @@ export class TeamComponent implements OnInit {
     });
   }
 
+  changeDate(dat: string): string {
+    const date = new Date(dat);
+    date.setHours(date.getHours() - 12)
+    const formattedDate = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    return formattedDate;
+  }
+
   private loadTeamDesigns(): void {
     this.subscription = this.dbService.loadTeamsDesigns().subscribe({
       next: (years) => {

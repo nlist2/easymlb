@@ -11,22 +11,22 @@
           {{ getRoundInfo(game['game_type'])?.description }}
         </div>
         <div class="game-date">
-          {{ game['game_date'].split("T")[0] }}
+          {{ changeDate(game['game_date']) }}
         </div>
         <div layout="row" class="year-number">
           <div fxFlex="30%" style="padding: 5px; align-content: center;" layout="column">
             <img [src]="getTeamDesign(game['away_team'])?.imgURL" alt="{{ game['away_team'] }} logo" class="team-logo">
-              <h1 class="score">{{ game['away_score'] }}</h1>
+            <h1 class="score">{{ game['away_score'] }}</h1>
           </div>
 
           <div class="at-col" fxFlex="40%" style="padding: 5px; align-content: center;" layout="column">
-              <h1> &#64; </h1>
+            <h1> &#64; </h1>
           </div>
 
 
           <div fxFlex="30%" style="padding: 5px" layout="column">
             <img [src]="getTeamDesign(game['home_team'])?.imgURL" alt="{{ game['home_team'] }} logo" class="team-logo">
-              <h1 class="score">{{ game['home_score'] }}</h1>
+            <h1 class="score">{{ game['home_score'] }}</h1>
           </div>
         </div>
       </a>
