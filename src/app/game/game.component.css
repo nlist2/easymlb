@@ -8,6 +8,7 @@
 }
 
 .row-gap-center-start {
+  margin-top: 10px;
   justify-content: center;
   align-items: flex-start;
 }
@@ -35,6 +36,12 @@
 
 .score-details {
   width: 40%
+}
+
+.scorecard-container {
+  width: 100%;
+  margin: 0 auto; /* This centers the div horizontally */
+  box-sizing: border-box;
 }
 
 .detail-item {
@@ -124,7 +131,7 @@ h1 {
 }
 
 .scoreboard-table {
-  width: 80%;
+  width: 100%;
   border-collapse: collapse;
   text-align: center;
 

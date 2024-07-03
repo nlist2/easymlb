@@ -49,7 +49,7 @@
       </div>
     </div>
 
-    <div>
+    <div class="scorecard-container">
       <br>
       <h1>Scorecard</h1>
       <br>
@@ -74,9 +74,12 @@
           </tr>
         </tbody>
       </table>
-      WP: {{ gameMeta['winning_pitcher'] }}
-      LP: {{ gameMeta['losing_pitcher'] }}
-      {{ gameMeta['saving_pitcher'] ? "SP: " + gameMeta['saving_pitcher'] : ""}}
+      <i>
+        <br>
+        WP: {{ gameMeta['winning_pitcher'] }}
+        <br>
+        LP: {{ gameMeta['losing_pitcher'] }}
+      </i>
     </div>
 
 
