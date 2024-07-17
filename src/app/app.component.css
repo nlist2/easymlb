@@ -112,3 +112,13 @@ main {
   box-sizing: inherit;
   position: relative;
 }
+
+.nav-info {
+  margin-top: 10px;
+  color: gray;
+  font-weight: 200;
+}
+
+.top-bar-nav {
+  margin-bottom: -20px;
+}

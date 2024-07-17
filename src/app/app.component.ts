@@ -37,13 +37,11 @@ import { Subscription } from "rxjs";
   styleUrl: "./app.component.css",
 })
 export class AppComponent {
-  public userCards: string[] = []; // Initialize as an empty array
-  private subscription: Subscription | undefined;
+  public userCards: string[] = [];
 
   constructor(
-    private router: Router,
-    private dbService: DbService,
-  ) {}
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     const startYear = 2024;
@@ -52,9 +50,6 @@ export class AppComponent {
     for (let year = startYear; year >= endYear; year--) {
       this.userCards.push(year.toString());
     }
-  }
-
-  ngOnDestroy(): void {
   }
 
   public isYearComponentRoute(): boolean {
